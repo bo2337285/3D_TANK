@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[System.Serializable]
 public class FSMControler : MonoBehaviour {
     #region 属性
     public string _name;
     private FSMState currState;
     private List<FSMState> stateList = new List<FSMState> ();
-    private float deltaTime = Time.deltaTime;
+    private float deltaTime = 0.02f;
     #endregion
 
     /// <summary>

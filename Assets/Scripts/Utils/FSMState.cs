@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 状态
 /// </summary>
+[System.Serializable]
 public class FSMState {
     #region  委托
     /// <summary>
@@ -58,7 +59,7 @@ public class FSMState {
     /// <summary>
     /// 状态转换字典
     /// </summary>
-    private Dictionary<FSMState, StateChange> dictChangeState = null;
+    private Dictionary<FSMState, StateChange> dictChangeState = new Dictionary<FSMState, StateChange> ();
     #endregion
     #region 构造方法
     /// <summary>
@@ -89,11 +90,19 @@ public class FSMState {
     public virtual void Enter () {
         if (IsRun) return;
         isRun = true;
-        onEnter ();
+        if (onEnter != null) {
+            onEnter ();
+        } else {
+            // Debug.Log (string.Format ("<color=yellow>{0} {1} onEnter is null</color>", controler.ToString (), name));
+        }
         Stay ();
     }
     public virtual void Stay () {
-        controler.StartCoroutine (DoStay ());
+        if (onStay != null) {
+            controler.StartCoroutine (DoStay ());
+        } else {
+            // Debug.Log (string.Format ("<color=yellow>{0} {1} onStay is null</color>", controler.ToString (), name));
+        }
     }
     IEnumerator DoStay () {
         while (isRun) {
@@ -104,7 +113,11 @@ public class FSMState {
     public virtual void Exit () {
         if (!isRun) return;
         isRun = false;
-        onExit ();
+        if (onExit != null) {
+            onExit ();
+        } else {
+            // Debug.Log (string.Format ("<color=yellow>{0} {1} onExit is null</color>", controler.ToString (), name));
+        }
     }
     #endregion
     #region 监听

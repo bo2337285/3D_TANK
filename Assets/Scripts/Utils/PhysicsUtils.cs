@@ -2,16 +2,20 @@
 using UnityEngine.AI;
 
 public static class PhysicsUtils {
-
     public delegate bool SearchFilter (RaycastHit hit);
-
+    public static Vector3 getMousePos () {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+        Physics.Raycast (ray, out hit, 1000, LayerMask.GetMask ("Ground"));
+        return hit.point;
+    }
     public static Vector3 GetRandomPoint (Vector2 randomRange, Vector3 samplePoint = default (Vector3)) {
         float mRadius = Random.Range (randomRange.x, randomRange.y);
         float fRadius = Random.Range (0, mRadius);
         float fAngle = Random.Range (0, 3.14f);
         Vector3 point = samplePoint;
-        point.x += Mathf.Sin (fAngle) * fRadius;
-        point.z += Mathf.Cos (fAngle) * fRadius;
+        point.x += Mathf.Sin (fAngle) * fRadius * (Random.value > 0.5f? 1: -1);
+        point.z += Mathf.Cos (fAngle) * fRadius * (Random.value > 0.5f? 1: -1);
         point.y = 0;
         return point;
     }
@@ -19,11 +23,14 @@ public static class PhysicsUtils {
     public static Vector3 GetRandomPointInMap (Vector2 randomRange, float pointDistance, Vector3 samplePoint) {
         NavMeshHit hit;
         Vector3 point = GetRandomPoint (randomRange, samplePoint);
+        int loopCount = 10;
         while (
-            (samplePoint - point).sqrMagnitude < pointDistance * pointDistance ||
-            !NavMesh.SamplePosition (point, out hit, 10, 1)
+            loopCount > 0 &&
+            ((samplePoint - point).sqrMagnitude < pointDistance * pointDistance ||
+                !NavMesh.SamplePosition (point, out hit, 10, 1))
         ) {
-            point = GetRandomPoint (randomRange, point);
+            point = GetRandomPoint (randomRange, samplePoint);
+            loopCount--;
         }
         return point;
     }

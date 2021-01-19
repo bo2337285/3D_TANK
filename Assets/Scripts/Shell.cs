@@ -17,20 +17,22 @@ public class Shell : MonoBehaviour {
     }
     void HitColl (Collider coll, CanAttackFilter filter) {
         if (!filter (coll.gameObject)) return;
-        Debug.Log("Hurt!" , coll.gameObject);
+        // Debug.Log ("Hurt!", coll.gameObject);
         Rigidbody rb = coll.GetComponent<Rigidbody> ();
         if (rb != null) { // 过滤没刚体的
             rb.AddExplosionForce (explosionForce, transform.position, explosionRadius);
         }
+        BattleManager.Instance.AddBattle (new Battle (creator.GetInstanceID (), coll.gameObject.GetInstanceID ()));
         // 伤害
-        Unit u = coll.GetComponent<Unit> ();
-        if (u != null) {
-            u.ApplyDamage (damage);
-        }
+        // Unit u = coll.GetComponent<Unit> ();
+        // if (u != null) {
+        //     u.ApplyDamage (damage);
+        // }
     }
 
-    // TODO 后续优化性能应该把子弹物理碰撞去掉,改用trigger+ AddExplosionForce来实现
-    private void OnCollisionEnter (Collision other) {
+    private void OnTriggerEnter (Collider other) {
+        // 打到自己不算
+        if (other.gameObject == creator) return;
         // 生成爆炸效果
         GameObject _explosionFX = Instantiate (explosionFX, transform.position, transform.rotation) as GameObject;
         float destoryTime = _explosionFX.GetComponent<ParticleSystem> ().main.duration; // 读取粒子系统的持续时间
@@ -49,4 +51,25 @@ public class Shell : MonoBehaviour {
             }
         }
     }
+
+    // TODO 后续优化性能应该把子弹物理碰撞去掉,改用trigger+ AddExplosionForce来实现
+    // private void OnCollisionEnter (Collision other) {
+    //     // 生成爆炸效果
+    //     GameObject _explosionFX = Instantiate (explosionFX, transform.position, transform.rotation) as GameObject;
+    //     float destoryTime = _explosionFX.GetComponent<ParticleSystem> ().main.duration; // 读取粒子系统的持续时间
+    //     Destroy (gameObject);
+    //     Destroy (_explosionFX, destoryTime);
+
+    //     // 获取子弹附近explosionRadius范围内的碰撞器
+    //     Collider[] colliders = Physics.OverlapSphere (transform.position, explosionRadius);
+    //     // 获取创造者的可攻击过滤器
+    //     Unit unit = creator.GetComponent<Unit> ();
+    //     if (unit != null && colliders.Length > 0) {
+    //         for (var i = 0; i < colliders.Length; i++) {
+    //             Collider coll = colliders[i];
+    //             // TODO 重载不用传filter的方法
+    //             HitColl (coll, unit.CanAttackFilter);
+    //         }
+    //     }
+    // }
 }
