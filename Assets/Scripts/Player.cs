@@ -16,7 +16,7 @@ public class Player : Unit {
     #endregion
     #region 钩子函数
     protected override void Start () {
-        base.Start();
+        base.Start ();
         rb = GetComponent<Rigidbody> ();
         weapon = GetComponent<TankWeapon> ();
         // // 自己去GameManager那注册一下自己
@@ -56,8 +56,12 @@ public class Player : Unit {
         canShoot = true;
     }
     private void Move () {
-        transform.Translate (new Vector3 (0, 0, Input.GetAxis ("Vertical") * moveSpeed * Time.deltaTime));
-        transform.Rotate (new Vector3 (0, Input.GetAxis ("Horizontal") * roateSpeed * Time.deltaTime, 0));
+        // transform.Translate (new Vector3 (0, 0, Input.GetAxis ("Vertical") * moveSpeed * Time.deltaTime));
+        // transform.Rotate (new Vector3 (0, Input.GetAxis ("Horizontal") * roateSpeed * Time.deltaTime, 0));
+        Vector3 _pos = transform.position;
+        Vector3 target = new Vector3 (Input.GetAxis ("Vertical"), 0, Input.GetAxis ("Horizontal") * -1) * moveSpeed * Time.deltaTime;
+        transform.Translate (target, Space.World);
+        transform.forward = (transform.position - _pos).normalized;
     }
     private void Aimed () {
         if (Input.GetAxis ("Mouse X") != 0) {

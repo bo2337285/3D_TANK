@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TankWeapon : MonoBehaviour {
-    public GameObject shell;
+    public GameObject defautShell;
+    public GameObject buffShell;
     public float shellSpeed;
     public Transform shootPoint;
     AudioSource audioSource;
@@ -13,12 +14,12 @@ public class TankWeapon : MonoBehaviour {
     }
 
     public void Shoot () {
-        GameObject _shell = Instantiate (shell, shootPoint.position, shootPoint.rotation) as GameObject;
+        GameObject _shell = Instantiate (defautShell, shootPoint.position, shootPoint.rotation) as GameObject;
         Shell _s = _shell.GetComponent<Shell> ();
         // 制定炮弹的发射者,用于传递各种信息
         _s.Init (gameObject);
-        Rigidbody _rb = _shell.GetComponent<Rigidbody> ();
-        _rb.velocity = shootPoint.forward * shellSpeed;
+        _s.Shoot (shootPoint.forward);
+        audioSource.clip = _s.shellAudioClip;
         audioSource.Play ();
     }
 }

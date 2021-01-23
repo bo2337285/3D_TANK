@@ -9,6 +9,14 @@ public static class PhysicsUtils {
         Physics.Raycast (ray, out hit, 1000, LayerMask.GetMask ("Ground"));
         return hit.point;
     }
+
+    public static Vector3 GetNavMeshRandomPos () {
+        NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation ();
+        int t = Random.Range (0, navMeshData.indices.Length);
+        Vector3 point = Vector3.Lerp (navMeshData.vertices[navMeshData.indices[t]], navMeshData.vertices[navMeshData.indices[t + 1]], Random.value);
+        point = Vector3.Lerp (point, navMeshData.vertices[navMeshData.indices[t + 2]], Random.value);
+        return point;
+    }
     public static Vector3 GetRandomPoint (Vector2 randomRange, Vector3 samplePoint = default (Vector3)) {
         float mRadius = Random.Range (randomRange.x, randomRange.y);
         float fRadius = Random.Range (0, mRadius);

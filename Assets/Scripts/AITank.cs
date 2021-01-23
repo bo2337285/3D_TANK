@@ -190,17 +190,17 @@ public class AITank : Unit {
         nav.stoppingDistance = attackDist;
         unitSetting = ResourceManager.Instance.enemyInfo;
         InitFSM ();
-        // // 自己去GameManager那注册一下自己
-        // GameManager.Instance.RegisterUnit (gameObject);
     }
     private void Patrol () {
-        if (target != null) return;
+        // Debug.Log (nav.isOnNavMesh);
+        if (target != null ) return;
         Vector3 dstPoint;
         // 检查是否有巡逻点,没有则创建
         if (!(patrolPointList.Count > 0)) {
             GetPatrolPoint ();
         }
-        if (!nav.pathPending && nav.remainingDistance <= nav.stoppingDistance + 0.5f) {
+        // 到达目标点,则切换下个目标点
+        if (!nav.pathPending  && nav.remainingDistance <= nav.stoppingDistance + 0.5f) {
             dstPoint = patrolPointList[currPatrolPointIdx];
             currPatrolPointIdx = currPatrolPointIdx < patrolPointList.Count - 1 ? currPatrolPointIdx + 1 : 0;
             // Debug.Log ("changePoint", gameObject);
@@ -213,7 +213,8 @@ public class AITank : Unit {
             if (i == 0) {
                 patrolPointList.Add (transform.position);
             } else {
-                patrolPointList.Add (PhysicsUtils.GetRandomPointInMap (new Vector2 (20f, 60f), 20f, patrolPointList[i - 1]));
+                // patrolPointList.Add (PhysicsUtils.GetRandomPointInMap (new Vector2 (20f, 60f), 20f, patrolPointList[i - 1]));
+                patrolPointList.Add (PhysicsUtils.GetNavMeshRandomPos ());
             }
         }
     }

@@ -1,26 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum MissionType {
-    ClearEnemy,
-    DefendBase
-}
-public class Mission : ScriptableObject {
-    public string id;
-    public string title;
-    public string description;
-    public MissionType missionType;
-    public int enemyTotalCount;
-    // public float enemyUpdateInterval;
-    // public int itemCountPerAdd;
-    protected List<GameObject> enemys;
-    public virtual bool IsCompleted () {
-        return false;
-    }
-    public virtual void MissionStart () { }
-    public virtual void MissionEnd () { }
-    public virtual void UpdateMisson () { }
-}
 /// <summary>
 /// 杀怪任务
 /// </summary>
@@ -71,24 +51,4 @@ public class ClearEnemyMission : Mission {
         // GC检查回收
         System.GC.Collect ();
     }
-}
-/// <summary>
-/// 防守任务
-/// </summary>
-[CreateAssetMenu (menuName = "AssetsSetting/Missions/DefendOfBase")]
-public class DefendBaseMission : Mission {
-    public int timer = 0;
-    public DefendBaseMission () {
-        missionType = MissionType.DefendBase;
-    }
-
-    public void UpdateMisson () {
-        if (IsCompleted ()) return;
-        timer--;
-    }
-    public override bool IsCompleted () {
-        return (timer <= 0);
-    }
-    public override void MissionStart () { }
-    public override void MissionEnd () { }
 }

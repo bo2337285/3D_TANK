@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour {
     public GameObject gameMissionEndDialog;
     public GameObject gameOverDialog;
     private TMP_Text textGameLevel;
-    public int itemCountPerAdd = 1;
     public Dictionary<int, GameObject> unitDict = new Dictionary<int, GameObject> ();
     public List<Mission> missions;
     public int beginLevel = 1;
@@ -43,12 +42,28 @@ public class GameManager : MonoBehaviour {
         textGameLevel = goGameLevel.GetComponent<TMP_Text> ();
         // 初始化游戏流程
         // TODO 获取配置的任务,后续需要排个序
-        missions = ResourceManager.Instance.missions;
+        // missions = ResourceManager.Instance.missions;
+        GetMissions();
         if (missions.Count > 0) {
             GamePlayManager.Instance.Init (beginLevel - 1, missions.Count - 1);
             GamePlayManager.Instance.GameStart ();
         } else {
             Debug.LogWarning ("No Missions!");
+        }
+    }
+    private void GetMissions () {
+        // FIXME 回头再调整任务配置这块
+        foreach (var item in ResourceManager.Instance.missions) {
+            if (item.missionType == MissionType.ClearEnemy) {
+                ClearEnemyMission _item = (ClearEnemyMission) item;
+                ClearEnemyMission _m = new ClearEnemyMission ();
+                _m.id = _item.id;
+                _m.title = _item.title;
+                _m.description = _item.description;
+                _m.enemyTotalCount = _item.enemyTotalCount;
+                _m.goal = _item.goal;
+                missions.Add (_m);
+            }
         }
     }
     public GameObject GetUnitById (int id) {
@@ -74,7 +89,8 @@ public class GameManager : MonoBehaviour {
     }
     public GameObject AddEnemy () {
         // FIXME 随机点不能保证NavMeshAgent有足够位置放
-        Vector3 randomPoint = PhysicsUtils.GetRandomPointInMap (new Vector2 (20f, 60f), 20f, Vector3.zero);
+        // Vector3 randomPoint = PhysicsUtils.GetRandomPointInMap (new Vector2 (20f, 60f), 20f, Vector3.zero);
+        Vector3 randomPoint = PhysicsUtils.GetNavMeshRandomPos ();
         GameObject _enemy = Instantiate<GameObject> (ResourceManager.Instance.enemyGObj, randomPoint, Quaternion.identity, EnemyGroups.transform);
         return _enemy;
     }

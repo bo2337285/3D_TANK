@@ -25,7 +25,7 @@ public class ResourceManager : MonoBehaviour {
     }
     IEnumerator LoadMissions () {
         Object[] _missions = Resources.LoadAll ("Missions");
-        Debug.Log (_missions.Length);
+        // Debug.Log (_missions.Length);
         foreach (var item in _missions) {
             missions.Add (item as Mission);
         }
