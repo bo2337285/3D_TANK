@@ -12,32 +12,22 @@ public static class PhysicsUtils {
 
     public static Vector3 GetNavMeshRandomPos () {
         NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation ();
-        int t = Random.Range (0, navMeshData.indices.Length);
+        int t = Random.Range (0, navMeshData.indices.Length-3);
         Vector3 point = Vector3.Lerp (navMeshData.vertices[navMeshData.indices[t]], navMeshData.vertices[navMeshData.indices[t + 1]], Random.value);
         point = Vector3.Lerp (point, navMeshData.vertices[navMeshData.indices[t + 2]], Random.value);
-        return point;
-    }
-    public static Vector3 GetRandomPoint (Vector2 randomRange, Vector3 samplePoint = default (Vector3)) {
-        float mRadius = Random.Range (randomRange.x, randomRange.y);
-        float fRadius = Random.Range (0, mRadius);
-        float fAngle = Random.Range (0, 3.14f);
-        Vector3 point = samplePoint;
-        point.x += Mathf.Sin (fAngle) * fRadius * (Random.value > 0.5f? 1: -1);
-        point.z += Mathf.Cos (fAngle) * fRadius * (Random.value > 0.5f? 1: -1);
-        point.y = 0;
         return point;
     }
 
     public static Vector3 GetRandomPointInMap (Vector2 randomRange, float pointDistance, Vector3 samplePoint) {
         NavMeshHit hit;
-        Vector3 point = GetRandomPoint (randomRange, samplePoint);
+        Vector3 point = GetNavMeshRandomPos ();
         int loopCount = 10;
         while (
             loopCount > 0 &&
             ((samplePoint - point).sqrMagnitude < pointDistance * pointDistance ||
                 !NavMesh.SamplePosition (point, out hit, 10, 1))
         ) {
-            point = GetRandomPoint (randomRange, samplePoint);
+            point = GetNavMeshRandomPos ();
             loopCount--;
         }
         return point;

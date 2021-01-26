@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
         // 初始化游戏流程
         // TODO 获取配置的任务,后续需要排个序
         // missions = ResourceManager.Instance.missions;
-        GetMissions();
+        GetMissions ();
         if (missions.Count > 0) {
             GamePlayManager.Instance.Init (beginLevel - 1, missions.Count - 1);
             GamePlayManager.Instance.GameStart ();
@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour {
         return unitDict.ContainsKey (id) ? unitDict[id] : null;
     }
     public void Restart () {
-        SceneManager.LoadScene (0);
+        SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
     }
     public GameObject AddPlayer () {
         player = GameObject.Find ("Player");

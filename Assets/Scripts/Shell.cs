@@ -43,6 +43,7 @@ public class Shell : MonoBehaviour {
         // 获取子弹附近explosionRadius范围内的碰撞器
         Collider[] colliders = Physics.OverlapSphere (transform.position, explosionRadius);
         // 获取创造者的可攻击过滤器
+        // FIXME creator销毁后这里会报错
         Unit unit = creator.GetComponent<Unit> ();
         if (unit != null && colliders.Length > 0) {
             for (var i = 0; i < colliders.Length; i++) {
