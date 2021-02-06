@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour {
     public static ResourceManager Instance;
-    public UnitSetting enemyInfo;
-    public UnitSetting playerInfo;
+    public UnitProps enemyInfo;
+    public UnitProps playerInfo;
     public GameObject playerGObj;
     public GameObject enemyGObj;
     public List<Mission> missions;
@@ -15,7 +15,7 @@ public class ResourceManager : MonoBehaviour {
     }
     void LoadResource () {
         // 加载单位属性模板
-        StartCoroutine (LoadUnitSetting ());
+        StartCoroutine (LoadUnitProps ());
         // 加载预制体
         StartCoroutine (LoadPrefabs ());
         // 加载预制体
@@ -37,11 +37,11 @@ public class ResourceManager : MonoBehaviour {
         yield return new WaitForEndOfFrame ();
         // Debug.Log ("<color=green> Prefabs Load Success </color>");
     }
-    IEnumerator LoadUnitSetting () {
-        enemyInfo = Resources.Load ("Settings/EnemyInfo") as UnitSetting;
-        playerInfo = Resources.Load ("Settings/PlayerInfo") as UnitSetting;
+    IEnumerator LoadUnitProps () {
+        enemyInfo = ((UnitPropsSetting) Resources.Load ("Settings/EnemyProps")).props;
+        playerInfo = ((UnitPropsSetting) Resources.Load ("Settings/PlayerProps")).props;
         yield return new WaitForEndOfFrame ();
-        // Debug.Log ("<color=green> UnitSetting Load Success </color>");
+        // Debug.Log ("<color=green> UnitProps Load Success </color>");
     }
 
 }

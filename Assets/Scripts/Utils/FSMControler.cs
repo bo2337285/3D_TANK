@@ -6,9 +6,9 @@ using UnityEngine;
 public class FSMControler : MonoBehaviour {
     #region 属性
     public string _name;
-    private FSMState currState;
-    private List<FSMState> stateList = new List<FSMState> ();
-    private float deltaTime = 0.02f;
+    [SerializeField] private FSMState currState;
+    [SerializeField] private List<FSMState> stateList = new List<FSMState> ();
+    [SerializeField] private float deltaTime = 0.02f;
     #endregion
 
     /// <summary>
@@ -44,6 +44,7 @@ public class FSMControler : MonoBehaviour {
     }
     IEnumerator ChangeState () {
         while (currState != null) {
+            // Debug.Log (currState.Name);
             FSMState nextState = currState.ListenStateChange ();
             if (nextState != null) {
                 currState.Exit ();

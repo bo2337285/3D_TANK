@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -127,3 +128,4 @@ public class TerrainToMeshConverter : ScriptableObject {
         Debug.Log ("Convert terrain to mesh finished!");
     }
 }
+#endif

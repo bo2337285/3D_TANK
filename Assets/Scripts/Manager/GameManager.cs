@@ -39,17 +39,17 @@ public class GameManager : MonoBehaviour {
         if (EnemyGroups == null) {
             EnemyGroups = new GameObject ("EnemyGroups");
         }
-        textGameLevel = goGameLevel.GetComponent<TMP_Text> ();
-        // 初始化游戏流程
-        // TODO 获取配置的任务,后续需要排个序
-        // missions = ResourceManager.Instance.missions;
-        GetMissions ();
-        if (missions.Count > 0) {
-            GamePlayManager.Instance.Init (beginLevel - 1, missions.Count - 1);
-            GamePlayManager.Instance.GameStart ();
-        } else {
-            Debug.LogWarning ("No Missions!");
-        }
+        // textGameLevel = goGameLevel.GetComponent<TMP_Text> ();
+        // // 初始化游戏流程
+        // // TODO 获取配置的任务,后续需要排个序
+        // // missions = ResourceManager.Instance.missions;
+        // GetMissions ();
+        // if (missions.Count > 0) {
+        //     GamePlayManager.Instance.Init (beginLevel - 1, missions.Count - 1);
+        //     GamePlayManager.Instance.GameStart ();
+        // } else {
+        //     Debug.LogWarning ("No Missions!");
+        // }
     }
     private void GetMissions () {
         // FIXME 回头再调整任务配置这块
@@ -76,7 +76,9 @@ public class GameManager : MonoBehaviour {
         player = GameObject.Find ("Player");
         if (player == null) {
             player = ResourceManager.Instance.playerGObj;
-            Instantiate<GameObject> (player, Vector3.zero, Quaternion.identity);
+            player = Instantiate<GameObject> (player, Vector3.zero, Quaternion.identity);
+            player.GetComponent<Unit> ().InitProps (ResourceManager.Instance.playerInfo);
+
         }
         return player;
     }
@@ -89,9 +91,9 @@ public class GameManager : MonoBehaviour {
     }
     public GameObject AddEnemy () {
         // FIXME 随机点不能保证NavMeshAgent有足够位置放
-        // Vector3 randomPoint = PhysicsUtils.GetRandomPointInMap (new Vector2 (20f, 60f), 20f, Vector3.zero);
         Vector3 randomPoint = PhysicsUtils.GetNavMeshRandomPos ();
         GameObject _enemy = Instantiate<GameObject> (ResourceManager.Instance.enemyGObj, randomPoint, Quaternion.identity, EnemyGroups.transform);
+        _enemy.GetComponent<Unit> ().InitProps (ResourceManager.Instance.enemyInfo);
         return _enemy;
     }
     public void RegisterUnit (GameObject unit) {

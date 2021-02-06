@@ -11,7 +11,7 @@ public class DefendBaseMission : Mission {
         missionType = MissionType.DefendBase;
     }
 
-    public void UpdateMisson () {
+    public override void UpdateMisson () {
         if (IsCompleted ()) return;
         timer--;
     }

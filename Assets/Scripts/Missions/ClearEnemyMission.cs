@@ -35,7 +35,7 @@ public class ClearEnemyMission : Mission {
         GameObject giver = GameManager.Instance.GetUnitById (giverId);
         GameObject sufferer = GameManager.Instance.GetUnitById (suffererId);
         if (giver != null && sufferer != null) {
-            return giver.GetComponent<Unit> ().atk * 2 - giver.GetComponent<Unit> ().def;
+            return giver.GetComponent<Unit> ().props.atk * 2 - sufferer.GetComponent<Unit> ().props.def;
         } else {
             return 0f;
         }

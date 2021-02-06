@@ -47,7 +47,7 @@ public class BattleManager : MonoBehaviour {
                 return DamageFn (giverId, suffererId);
             } else {
                 // 否则就常规地攻减防计算
-                return giver.GetComponent<Unit> ().atk - giver.GetComponent<Unit> ().def;
+                return giver.GetComponent<Unit> ().props.atk - sufferer.GetComponent<Unit> ().props.def;
             }
         } else {
             return 0f;

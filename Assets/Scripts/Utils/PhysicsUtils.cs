@@ -3,22 +3,34 @@ using UnityEngine.AI;
 
 public static class PhysicsUtils {
     public delegate bool SearchFilter (RaycastHit hit);
+
+    /// <summary>
+    /// 获取鼠标在地图中位置
+    /// </summary>
+    /// <returns></returns>
     public static Vector3 getMousePos () {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
         Physics.Raycast (ray, out hit, 1000, LayerMask.GetMask ("Ground"));
         return hit.point;
     }
-
+    /// <summary>
+    /// 获取可寻路地图上的随机点
+    /// </summary>
     public static Vector3 GetNavMeshRandomPos () {
         NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation ();
-        int t = Random.Range (0, navMeshData.indices.Length-3);
+        int t = Random.Range (0, navMeshData.indices.Length - 3);
         Vector3 point = Vector3.Lerp (navMeshData.vertices[navMeshData.indices[t]], navMeshData.vertices[navMeshData.indices[t + 1]], Random.value);
         point = Vector3.Lerp (point, navMeshData.vertices[navMeshData.indices[t + 2]], Random.value);
         return point;
     }
-
-    public static Vector3 GetRandomPointInMap (Vector2 randomRange, float pointDistance, Vector3 samplePoint) {
+    /// <summary>
+    /// 获取可寻路地图上的随机点
+    /// </summary>
+    /// <param name="pointDistance">点间距</param>
+    /// <param name="samplePoint">参照点</param>
+    /// <returns></returns>
+    public static Vector3 GetNavMeshRandomPos (float pointDistance, Vector3 samplePoint) {
         NavMeshHit hit;
         Vector3 point = GetNavMeshRandomPos ();
         int loopCount = 10;
